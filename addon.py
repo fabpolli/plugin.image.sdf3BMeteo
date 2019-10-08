@@ -77,7 +77,7 @@ def set_new_pref():
 def manage_new_pref():
     sLocToFind = utils.get_user_input('Indica il nome della località da aggiungere ai preferiti')
     if(sLocToFind):
-        oLocSearch = LocSearch(__profile__, handle)
+        oLocSearch = LocSearch(__profile__, handle, addonname)
         oLocSearch.doSearch(sLocToFind)
 
 def show_config_menu():
