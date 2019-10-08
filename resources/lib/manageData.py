@@ -43,7 +43,7 @@ class ManageData:
         sIconSection = re.findall(r'url\(["\']?(?P<url>[^"\']+)["\']?\)', sText)
         sTempSection = re.findall('<p>([^<]+?)</p>', sText)
         sTempOut = sTempSection[0]
-        sTempOut = sTempOut.replace("&deg;", "°")
+        sTempOut = sTempOut.replace("&deg;",'Â°')
         return (sTimeSection[0], sTempOut, sIconSection[0])
 
     def getUrl(self, pathId):
@@ -63,7 +63,7 @@ class ManageData:
         oPage = re.findall('<div id="page-.*', sHtml)
         nPage = int(page[-1:])
         if(oPage):
-            sections = re.findall('(<div class="day_container".*?<div class="day_container)', oPage[nPage])
+            sections = re.findall('(<div class="day_container".*?</p>)', oPage[nPage])
             for subSection in sections:
                 aInfo = self.getSingleInfo(subSection)
                 imageUrl = self.getUrl(aInfo[2])
