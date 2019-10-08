@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="1036">
+        <setting label="Località preferita 1" type="text" id="Starred1" default=""/>
+        <setting label="Località preferita 2" type="text" id="Starred2" default=""/>
+        <setting label="Località preferita 3" type="text" id="Starred3" default=""/>
+        <setting label="Località preferita 4" type="text" id="Starred4" default=""/>
+        <setting label="Località preferita 5" type="text" id="Starred5" default=""/>
+    </category>
+</settings>
