@@ -32,20 +32,30 @@ __author__ = "fabpolli"
  
 addon = xbmcaddon.Addon(id=__plugin__)
 __profile__ = xbmc.translatePath( addon.getAddonInfo('profile') ).decode("utf-8")
+mode=''
+clearImageCacheFlag=False
 if(not os.path.isdir(__profile__)):
     os.makedirs(__profile__)
+#web_pdb.set_trace()
+if(sys.argv[0]):
+    aParamLaunch = sys.argv[0].split('/')
+    if(aParamLaunch[len(aParamLaunch)-1]=='clearImageCache'):
+        dialog = xbmcgui.Dialog()
+        ret = dialog.yesno('Kodi', 'Confermi di voler eliminare tutte le immagini scaricate presenti nella cache di questo addon?')
+        mode='clearImageCache'
+        clearImageCacheFlag=ret==1
 
-# plugin handle
-handle = int(sys.argv[1])
-addonname = addon.getAddonInfo('name')
-params = utils.parameters_string_to_dict(sys.argv[2])
-mode = str(params.get("mode", ""))
-clearImageCacheFlag=addon.getSetting("clearImageCache")
-starred1 = addon.getSetting("Starred1")
-starred2 = addon.getSetting("Starred2")
-starred3 = addon.getSetting("Starred3")
-starred4 = addon.getSetting("Starred4")
-starred5 = addon.getSetting("Starred5")
+if(mode<>'clearImageCache'):
+    # plugin handle
+    handle = int(sys.argv[1])
+    addonname = addon.getAddonInfo('name')
+    params = utils.parameters_string_to_dict(sys.argv[2])
+    mode = str(params.get("mode", ""))
+    starred1 = addon.getSetting("Starred1")
+    starred2 = addon.getSetting("Starred2")
+    starred3 = addon.getSetting("Starred3")
+    starred4 = addon.getSetting("Starred4")
+    starred5 = addon.getSetting("Starred5")
 
 
 def set_new_pref():
@@ -144,6 +154,7 @@ def show_days_menu():
 
 def clearImageCache():
     folder = __profile__
+    bOk =True
     for the_file in os.listdir(folder):
         if(the_file<>"settings.xml"):
             file_path = os.path.join(folder, the_file)
@@ -151,22 +162,29 @@ def clearImageCache():
                 if os.path.isfile(file_path):
                     os.unlink(file_path)
             except Exception as e:
-                pass
-    addon.setSetting("clearImageCache", "false")
+                bOk =False
+    dialog = xbmcgui.Dialog()
+    if(bOk):
+        ok = dialog.ok('Kodi', 'Pulizia cache immagini eseguita con successo')
+    else:
+        ok = dialog.ok('Kodi', 'Errore eseguendo la pulizia della cache delle immagini')
 
-if(clearImageCacheFlag=='true'):
-    clearImageCache()
 
 #xbmc.log(str(sys.version_info[0]),xbmc.LOGNOTICE)
-if mode[:4]=="page":
-    showDayData()
-elif mode=="nop":
-    pass
-elif mode=="addpref":
-    manage_new_pref()
-elif mode=="setPref":
-    set_new_pref()
-elif mode=="showloc":
-    show_days_menu()
+#xbmc.log(mode,xbmc.LOGNOTICE)
+if(mode=='clearImageCache'):
+    if(clearImageCacheFlag):
+        clearImageCache()
 else:
-    show_root_menu()
+    if mode[:4]=="page":
+        showDayData()
+    elif mode=="nop":
+        pass
+    elif mode=="addpref":
+        manage_new_pref()
+    elif mode=="setPref":
+        set_new_pref()
+    elif mode=="showloc":
+        show_days_menu()
+    else:
+        show_root_menu()
