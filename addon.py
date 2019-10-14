@@ -40,11 +40,13 @@ handle = int(sys.argv[1])
 addonname = addon.getAddonInfo('name')
 params = utils.parameters_string_to_dict(sys.argv[2])
 mode = str(params.get("mode", ""))
+clearImageCacheFlag=addon.getSetting("clearImageCache")
 starred1 = addon.getSetting("Starred1")
 starred2 = addon.getSetting("Starred2")
 starred3 = addon.getSetting("Starred3")
 starred4 = addon.getSetting("Starred4")
 starred5 = addon.getSetting("Starred5")
+
 
 def set_new_pref():
     name_loc = str(params.get("name_loc", ""))
@@ -86,13 +88,14 @@ def show_config_menu():
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 def showDayData():
-    locCode = str(params.get("locCode", ""))
+    locCode = int(str(params.get("locCode", "")))
+    locName = str(params.get("locName", ""))
     dataManager = ManageData(__profile__, handle)
-    dataManager.show_day_forecast(mode, locCode)
+    dataManager.show_day_forecast(mode, locCode, locName)
 
 def addItemRootMenu(sText, sCode):
     liStyle = xbmcgui.ListItem(sText)
-    utils.addDirectoryItem({"mode": "showloc", "locCode": sCode}, handle, liStyle)
+    utils.addDirectoryItem({"mode": "showloc", "locCode": sCode, "locName": sText}, handle, liStyle)
     
 def show_root_menu():
     numStarred = 0
@@ -126,6 +129,7 @@ def show_days_menu():
     today = datetime.date.today();
     attDow = today.weekday();
     locCode = str(params.get("locCode", ""))
+    locName = params.get("locName", "")
     for day_idx in range(7):
         attDate = today + datetime.timedelta(days=day_idx)
         if(day_idx==0):            
@@ -135,9 +139,25 @@ def show_days_menu():
                 liStyle = xbmcgui.ListItem("Domani")
             else:
                 liStyle = xbmcgui.ListItem(utils.dowArray[day_idx] + " " + attDate.strftime("%d") + " " + utils.monthArray[int(attDate.strftime("%m"))])
-        utils.addDirectoryItem({"mode": "page-"+str(day_idx), "locCode": locCode}, handle, liStyle)
+        utils.addDirectoryItem({"mode": "page-"+str(day_idx), "locCode": locCode, "locName": locName}, handle, liStyle)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
+def clearImageCache():
+    folder = __profile__
+    for the_file in os.listdir(folder):
+        if(the_file<>"settings.xml"):
+            file_path = os.path.join(folder, the_file)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            except Exception as e:
+                pass
+    addon.setSetting("clearImageCache", "false")
+
+if(clearImageCacheFlag=='true'):
+    clearImageCache()
+
+#xbmc.log(str(sys.version_info[0]),xbmc.LOGNOTICE)
 if mode[:4]=="page":
     showDayData()
 elif mode=="nop":

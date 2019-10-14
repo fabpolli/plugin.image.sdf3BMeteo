@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.sdf3BMeteo" name="Previsioni 3B Meteo" version="1.0.0" setting="true" provider-name="fabpolli">
+<addon id="plugin.image.sdf3BMeteo" name="Previsioni 3B Meteo" version="1.0.1" setting="true" provider-name="fabpolli">
 	<requires>
 		<import addon="xbmc.python" version="2.14.0"/>
+        <!--<import addon="script.module.web-pdb" />-->
+        <import addon="script.module.beautifulsoup4" version="4.6.2"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>image</provides>
@@ -11,16 +13,19 @@
 		</assets>
 	</extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="it">Previsioni meteo da 3B Meteo</summary>
-		<description lang="it">Mostra le previsioni ora per ora sette giorni per cinque località preferite</description>
+        <summary lang="it_IT">Previsioni meteo da 3B Meteo</summary>
+		<description lang="it_IT">Mostra le previsioni ora per ora sette giorni per cinque località preferite</description>
         <platform>all</platform>
 		<license>GNU General Public License, v2</license>
 		<language></language>
 		<forum></forum>
-		<source>https://github.com/zag2me/plugin.image.sdf3BMeteo</source>
+		<source>https://github.com/fabpolli/plugin.image.sdf3BMeteo</source>
 		<website></website>
 		<email></email>
-        <news>v1.0.0 (2019-10-08)
+        <news>
+            v1.0.1 (2019-10-14)
+            Recuperate informazioni aggiuntive per mostrare più dati nelle previsioni
+            v1.0.0 (2019-10-08)
             Prima versione, permette di visualizzare il meteo di sette giorni per cinque località preferite
         </news>
     </extension>
