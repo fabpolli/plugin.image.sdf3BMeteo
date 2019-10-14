@@ -7,6 +7,7 @@
         <setting label="Località preferita 4" type="text" id="Starred4" default=""/>
         <setting label="Località preferita 5" type="text" id="Starred5" default=""/>
         <setting type="sep"/>
-        <setting label="Pulisci cache immagini" type="bool" id="clearImageCache" default="false"/>
+        <!--<setting label="Pulisci cache immagini" type="bool" id="clearImageCache" default="false"/>-->
+        <setting label="Pulisci cache immagini" type="action" action="RunPlugin(plugin://plugin.image.sdf3BMeteo/addon.py/clearImageCache)"/>
     </category>
 </settings>
