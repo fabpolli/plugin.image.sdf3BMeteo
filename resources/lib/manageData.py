@@ -52,20 +52,27 @@ class ManageData:
             return url
 
     def save_image_to_disk(self, filename, imageUrl, bigFileName, bigImageUrl):
+        #web_pdb.set_trace()
         if(not os.path.isfile(self.profileName + filename)):
-            imgRequest = urllib2.Request(imageUrl)
-            imgData = urllib2.urlopen(imgRequest).read()
-            output = open(self.profileName + filename,'wb')
-            output.write(imgData)
-            output.close()
-            imgRequest = urllib2.Request(bigImageUrl)
-            imgData = urllib2.urlopen(imgRequest).read()
-            output = open(self.profileName + bigFileName,'wb')
-            output.write(imgData)
-            output.close()
+            try:
+                imgRequest = urllib2.Request(imageUrl)
+                imgData = urllib2.urlopen(imgRequest).read()
+                output = open(self.profileName + filename,'wb')
+                output.write(imgData)
+                output.close()
+            except urllib2.HTTPError, e:
+                pass
+        if(not os.path.isfile(self.profileName + bigFileName)):
+            try:
+                imgRequest = urllib2.Request(bigImageUrl)
+                imgData = urllib2.urlopen(imgRequest).read()
+                output = open(self.profileName + bigFileName,'wb')
+                output.write(imgData)
+                output.close()
+            except urllib2.HTTPError, e:
+                pass
             
     def show_day_forecast(self, page, locCode, locName):
-        #web_pdb.set_trace()
         url = self.meteoDataUrl
         nIdxPage = int(page.split('-')[1])
         url = url.replace("[PAGE_NO]", page)
@@ -90,7 +97,6 @@ class ManageData:
         self.get_meteo_data(locName, nIdxPage)
         if(nIdxPage>0):
             self.get_meteo_data(locName, nIdxPage-1)
-        
         for dData in self.aMeteoMoreData[nIdxPage]:
             self.save_image_to_disk(self.aMeteoMoreData[nIdxPage][dData]["in"], self.aMeteoMoreData[nIdxPage][dData]["iu"], self.aMeteoMoreData[nIdxPage][dData]["bin"], self.aMeteoMoreData[nIdxPage][dData]["biu"])
             if not self.aMeteoMoreData[nIdxPage][dData]["d"]:
@@ -102,8 +108,14 @@ class ManageData:
                     sItemText = u"{0:02d}:00 {2} {5}mm [B]{1}°C[/B] ({3}°C) umidità {4}%".encode("utf-8")
             sItemText = sItemText.format(dData, self.aMeteoMoreData[nIdxPage][dData]["t"], self.aMeteoMoreData[nIdxPage][dData]["d"], self.aMeteoMoreData[nIdxPage][dData]["tp"], self.aMeteoMoreData[nIdxPage][dData]["u"], self.aMeteoMoreData[nIdxPage][dData]["p"])
             liStyle = xbmcgui.ListItem(sItemText)
-            icon = self.profileName+ self.aMeteoMoreData[nIdxPage][dData]["bin"]
-            liStyle.setArt({'thumb': icon, 'icon': icon})
+            icon = None
+            if(os.path.isfile(self.profileName + self.aMeteoMoreData[nIdxPage][dData]["bin"])):
+                icon = self.profileName+ self.aMeteoMoreData[nIdxPage][dData]["bin"]
+            else:
+                if(os.path.isfile(self.profileName + self.aMeteoMoreData[nIdxPage][dData]["in"])):
+                    icon = self.profileName+ self.aMeteoMoreData[nIdxPage][dData]["in"]
+            if(icon):
+                liStyle.setArt({'thumb': icon, 'icon': icon})
             liStyle.setInfo("video", {})
             utils.addLinkItem({"mode": "nop"}, self.oHandle, liStyle)
         xbmcplugin.endOfDirectory(handle=self.oHandle, succeeded=True)
