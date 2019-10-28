@@ -148,7 +148,7 @@ def show_days_menu():
             if(day_idx==1):
                 liStyle = xbmcgui.ListItem("Domani")
             else:
-                liStyle = xbmcgui.ListItem(utils.dowArray[day_idx] + " " + attDate.strftime("%d") + " " + utils.monthArray[int(attDate.strftime("%m"))])
+                liStyle = xbmcgui.ListItem(utils.dowArray[attDow+day_idx] + " " + attDate.strftime("%d") + " " + utils.monthArray[int(attDate.strftime("%m"))-1])
         utils.addDirectoryItem({"mode": "page-"+str(day_idx), "locCode": locCode, "locName": locName}, handle, liStyle)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 

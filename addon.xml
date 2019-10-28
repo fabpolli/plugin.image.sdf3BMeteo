@@ -25,6 +25,7 @@
         <news>
             v1.0.3 (2019-10-28)
             Gestiti errori recupero risorse (immagini) in caso di url non presenti
+            Sistemato errore visualizzazione mese e giorno della settimana
             v1.0.2 (2019-10-14)
             Recuperate informazioni aggiuntive per mostrare più dati nelle previsioni
             v1.0.0 (2019-10-08)
