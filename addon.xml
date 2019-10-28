@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.sdf3BMeteo" name="Previsioni 3B Meteo" version="1.0.2" setting="true" provider-name="fabpolli">
+<addon id="plugin.image.sdf3BMeteo" name="Previsioni 3B Meteo" version="1.0.3" setting="true" provider-name="fabpolli">
 	<requires>
 		<import addon="xbmc.python" version="2.14.0"/>
         <!--<import addon="script.module.web-pdb" />-->
@@ -23,6 +23,8 @@
 		<website></website>
 		<email></email>
         <news>
+            v1.0.3 (2019-10-28)
+            Gestiti errori recupero risorse (immagini) in caso di url non presenti
             v1.0.2 (2019-10-14)
             Recuperate informazioni aggiuntive per mostrare più dati nelle previsioni
             v1.0.0 (2019-10-08)
